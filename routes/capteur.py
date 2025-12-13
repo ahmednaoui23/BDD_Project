@@ -2,23 +2,19 @@ from fastapi import APIRouter, Depends, Form, HTTPException
 from sqlalchemy.orm import Session
 from models.capteur import Capteur
 from models.database import get_db
+from schemas.capteur import CapteurCreate
 
 router = APIRouter(tags=["Capteur"])
 
 # Créer un capteur avec Form
 @router.post("/capteurs")
-def create_capteur(
-    nom_capteur: str = Form(...),
-    type_capteur: str = Form(...),
-    id_arrondissement: int = Form(...),
-    statut: str = Form(...),
-    db: Session = Depends(get_db)
-):
+def create_capteur(capteur: CapteurCreate, db: Session = Depends(get_db)):
     db_cap = Capteur(
-        nom_capteur=nom_capteur,
-        type_capteur=type_capteur,
-        id_arrondissement=id_arrondissement,
-        statut=statut
+        type_capteur=capteur.type_capteur,
+        statut=capteur.statut,
+        date_installation=capteur.date_installation,
+        id_proprietaire=capteur.id_proprietaire,
+        id_arrondissement=capteur.id_arrondissement
     )
     db.add(db_cap)
     db.commit()

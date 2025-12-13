@@ -2,21 +2,19 @@ from fastapi import APIRouter, Depends, Form, HTTPException
 from sqlalchemy.orm import Session
 from models.participation import Participation
 from models.database import get_db
+from schemas.participation import ParticipationCreate
 
 router = APIRouter(tags=["Participation"])
 
 # Créer une participation via Form fields
+
 @router.post("/participations")
-def create_participation(
-    id_citoyen: int = Form(...),
-    id_consultation: int = Form(...),
-    reponse: str = Form(...),
-    db: Session = Depends(get_db)
-):
+def create_participation(participation: ParticipationCreate, db: Session = Depends(get_db)):
     db_part = Participation(
-        id_citoyen=id_citoyen,
-        id_consultation=id_consultation,
-        reponse=reponse
+        id_citoyen=participation.id_citoyen,
+        id_consultation=participation.id_consultation,
+        date_participation=participation.date_participation,
+        avis=participation.avis
     )
     db.add(db_part)
     db.commit()

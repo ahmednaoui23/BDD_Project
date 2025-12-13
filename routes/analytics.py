@@ -69,10 +69,10 @@ def interventions_predictives(db: Session = Depends(get_db)):
         Intervention.nature_intervention.ilike("prédictive")
     ).all()
     total_economie = sum([i.impact_environnemental or 0 for i in interventions])
-    return {"nombre_interventions": len(interventions), "economie_CO2": total_economie}
+    return {"nombre_interventions": len(interventions), "economie_co2": total_economie}
 
 # 5. Trajets de véhicules autonomes avec la plus grande réduction de CO2
 @router.get("/trajets-plus-economiques")
 def trajets_plus_economiques(db: Session = Depends(get_db)):
     trajets = db.query(Trajet).order_by(Trajet.economie_co2.desc()).limit(10).all()
-    return [{"origine": t.origine, "destination": t.destination, "economie_xo2": t.economie_co2} for t in trajets]
+    return [{"origine": t.origine, "destination": t.destination, "economie_co2": t.economie_co2} for t in trajets]

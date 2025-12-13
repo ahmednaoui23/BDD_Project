@@ -1,6 +1,5 @@
 from pydantic import BaseModel
 from datetime import datetime
-
 class EffectueCreate(BaseModel):
     immatriculation: str
     id_trajet: int

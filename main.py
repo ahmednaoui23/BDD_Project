@@ -19,8 +19,6 @@ from routes import (
     analytics
 )
 
-# 🔹 Charger les variables d'environnement
-load_dotenv()
 
 # 🔹 Créer l'application FastAPI
 app = FastAPI(title="Smart City Analytics Platform")

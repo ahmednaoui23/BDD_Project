@@ -2,23 +2,17 @@ from fastapi import APIRouter, Depends, Form, HTTPException
 from sqlalchemy.orm import Session
 from models.vehicule import Vehicule
 from models.database import get_db
+from schemas.vehicule import VehiculeCreate
 
 router = APIRouter(tags=["Vehicule"])
 
 # POST via Form, pas besoin de Content-Type JSON
 @router.post("/vehicules")
-def create_vehicule(
-    immatriculation: str = Form(...),
-    marque: str = Form(...),
-    modele: str = Form(...),
-    annee: int = Form(...),
-    db: Session = Depends(get_db)
-):
+def create_vehicule(veh: VehiculeCreate, db: Session = Depends(get_db)):
     db_veh = Vehicule(
-        immatriculation=immatriculation,
-        marque=marque,
-        modele=modele,
-        annee=annee
+        immatriculation=veh.immatriculation,
+        type_vehicule=veh.type_vehicule,
+        energie_utilisee=veh.energie_utilisee
     )
     db.add(db_veh)
     db.commit()

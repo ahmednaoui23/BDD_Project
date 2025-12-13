@@ -2,18 +2,19 @@ from fastapi import APIRouter, Depends, Form, HTTPException
 from sqlalchemy.orm import Session
 from models.proprietaire import Proprietaire
 from models.database import get_db
+from schemas.proprietaire import ProprietaireCreate
 
 router = APIRouter(tags=["Proprietaire"])
 
-# Créer un propriétaire via Form
 @router.post("/proprietaires")
-def create_proprietaire(
-    nom: str = Form(...),
-    prenom: str = Form(...),
-    email: str = Form(...),
-    db: Session = Depends(get_db)
-):
-    db_prop = Proprietaire(nom=nom, prenom=prenom, email=email)
+def create_proprietaire(prop: ProprietaireCreate, db: Session = Depends(get_db)):
+    db_prop = Proprietaire(
+        nom=prop.nom,
+        email=prop.email,
+        type=prop.type,
+        adresse=prop.adresse,
+        telephone=prop.telephone,
+    )
     db.add(db_prop)
     db.commit()
     db.refresh(db_prop)

@@ -1,19 +1,19 @@
 from pydantic import BaseModel
-from typing import Optional
-from datetime import datetime
+
+
 
 class TrajetCreate(BaseModel):
-    origine: str
-    destination: str
-    duree: int
+    id_arrondissement_depart: int
+    id_arrondissement_arrivee: int
     economie_co2: float
-    date_depart: Optional[datetime] = None
-    date_arrivee: Optional[datetime] = None
-    id_arrondissement_depart: Optional[int] = None
-    id_arrondissement_arrivee: Optional[int] = None
+    duree: int = 30
+    date_depart: str  # format "YYYY-MM-DD HH:MM:SS"
 
 class TrajetRead(TrajetCreate):
     id_trajet: int
+    origine: str
+    destination: str
+    date_arrivee: str  # format "YYYY-MM-DD HH:MM:SS"
 
     class Config:
         orm_mode = True

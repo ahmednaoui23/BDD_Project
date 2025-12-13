@@ -2,23 +2,17 @@ from fastapi import APIRouter, Depends, Form, HTTPException
 from sqlalchemy.orm import Session
 from models.consultation_citoyenne import ConsultationCitoyenne
 from models.database import get_db
+from schemas.consultation_citoyenne import ConsultationCreate
 
 router = APIRouter(tags=["Consultation"])
 
 # POST avec Form fields
 @router.post("/consultations")
-def create_consultation(
-    titre: str = Form(...),
-    description: str = Form(...),
-    date_debut: str = Form(...),  # si tu utilises datetime, tu peux parser plus tard
-    date_fin: str = Form(...),
-    db: Session = Depends(get_db)
-):
+def create_consultation(consultation: ConsultationCreate, db: Session = Depends(get_db)):
     db_cons = ConsultationCitoyenne(
-        titre=titre,
-        description=description,
-        date_debut=date_debut,
-        date_fin=date_fin
+        titre=consultation.titre,
+        date_consultation=consultation.date_consultation,
+        id_arrondissement=consultation.id_arrondissement
     )
     db.add(db_cons)
     db.commit()

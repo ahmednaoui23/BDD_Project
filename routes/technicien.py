@@ -2,18 +2,19 @@ from fastapi import APIRouter, Depends, Form, HTTPException
 from sqlalchemy.orm import Session
 from models.technicien import Technicien
 from models.database import get_db
+from schemas.technicien import TechnicienCreate
 
 router = APIRouter(tags=["Technicien"])
 
 # Créer un technicien via Form
 @router.post("/techniciens")
-def create_technicien(
-    nom: str = Form(...),
-    prenom: str = Form(...),
-    email: str = Form(...),
-    db: Session = Depends(get_db)
-):
-    db_tech = Technicien(nom=nom, prenom=prenom, email=email)
+def create_technicien(tech: TechnicienCreate, db: Session = Depends(get_db)):
+    db_tech = Technicien(
+        nom=tech.nom,
+        prenom=tech.prenom,
+        email=tech.email,
+        certification=tech.certification,
+    )
     db.add(db_tech)
     db.commit()
     db.refresh(db_tech)

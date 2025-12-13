@@ -2,23 +2,20 @@ from fastapi import APIRouter, Depends, Form, HTTPException
 from sqlalchemy.orm import Session
 from models.citoyen import Citoyen
 from models.database import get_db
+from schemas.citoyen import CitoyenCreate
 
 router = APIRouter(tags=["Citoyen"])
 
 # Créer un citoyen avec Form
 @router.post("/citoyens")
-def create_citoyen(
-    nom: str = Form(...),
-    prenom: str = Form(...),
-    email: str = Form(...),
-    score_engagement: int = Form(0),
-    db: Session = Depends(get_db)
-):
+def create_citoyen(citoyen: CitoyenCreate, db: Session = Depends(get_db)):
     db_citoyen = Citoyen(
-        nom=nom,
-        prenom=prenom,
-        email=email,
-        score_engagement=score_engagement
+        nom=citoyen.nom,
+        email=citoyen.email,
+        adresse=citoyen.adresse,
+        telephone=citoyen.telephone,
+        score_engagement=citoyen.score_engagement,
+        preference_mobilite=citoyen.preference_mobilite
     )
     db.add(db_citoyen)
     db.commit()

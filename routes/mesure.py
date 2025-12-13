@@ -4,22 +4,19 @@ from models.mesure import Mesure
 from models.database import get_db
 from datetime import datetime
 
+from schemas.mesure import MesureCreate
+
 router = APIRouter(tags=["Mesure"])
 
 # Créer une mesure via Form fields
+
 @router.post("/mesures")
-def create_mesure(
-    valeur: float = Form(...),
-    unite: str = Form(...),
-    date_mesure: str = Form(...),  # ex: "2025-12-12 14:30:00"
-    id_capteur: str = Form(...),
-    db: Session = Depends(get_db)
-):
+def create_mesure(mesure: MesureCreate, db: Session = Depends(get_db)):
     db_mes = Mesure(
-        valeur=valeur,
-        unite=unite,
-        date_mesure=datetime.strptime(date_mesure, "%Y-%m-%d %H:%M:%S"),
-        id_capteur=id_capteur
+        valeur=mesure.valeur,
+        unite=mesure.unite,
+        date_mesure=mesure.date_mesure,
+        id_capteur=mesure.id_capteur
     )
     db.add(db_mes)
     db.commit()

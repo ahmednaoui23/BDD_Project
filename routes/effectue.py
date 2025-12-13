@@ -2,21 +2,17 @@ from fastapi import APIRouter, Depends, Form, HTTPException
 from sqlalchemy.orm import Session
 from models.effectue import Effectue
 from models.database import get_db
+from schemas.effectue import EffectueCreate
 
 router = APIRouter(tags=["Effectue"])
 
 # POST avec Form fields
 @router.post("/effectues")
-def create_effectue(
-    immatriculation: str = Form(...),
-    id_trajet: int = Form(...),
-    date_eff: str = Form(...),  # si c'est datetime, parser plus tard
-    db: Session = Depends(get_db)
-):
+def create_effectue(effectue: EffectueCreate, db: Session = Depends(get_db)):
     db_effect = Effectue(
-        immatriculation=immatriculation,
-        id_trajet=id_trajet,
-        date_eff=date_eff
+        immatriculation=effectue.immatriculation,
+        id_trajet=effectue.id_trajet,
+        date_execution=effectue.date_execution,
     )
     db.add(db_effect)
     db.commit()
