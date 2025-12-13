@@ -16,7 +16,8 @@ def create_mesure(mesure: MesureCreate, db: Session = Depends(get_db)):
         valeur=mesure.valeur,
         unite=mesure.unite,
         date_mesure=mesure.date_mesure,
-        id_capteur=mesure.id_capteur
+        id_capteur=mesure.id_capteur,
+        type_mesure=mesure.type_mesure
     )
     db.add(db_mes)
     db.commit()
