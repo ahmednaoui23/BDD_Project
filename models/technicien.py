@@ -5,7 +5,7 @@ from .database import Base
 class Technicien(Base):
     __tablename__ = "technicien"
 
-    id_technicien = Column(Integer, primary_key=True, index=True)
+    id_technicien = Column(Integer, primary_key=True, index=True, autoincrement=True)
     nom = Column(String(100), nullable=False)
     prenom = Column(String(100), nullable=False)
     certification = Column(Boolean, nullable=False)

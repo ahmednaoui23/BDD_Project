@@ -12,7 +12,6 @@ def create_technicien(tech: TechnicienCreate, db: Session = Depends(get_db)):
     db_tech = Technicien(
         nom=tech.nom,
         prenom=tech.prenom,
-        email=tech.email,
         certification=tech.certification,
     )
     db.add(db_tech)
