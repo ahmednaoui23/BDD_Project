@@ -13,7 +13,6 @@ router = APIRouter(tags=["Analytics"])
 
 
 def score_mesure(mesure: Mesure):
-    # Exemple de pondération selon le type
     poids = {
         "Qualité de l'air": 2,
         "Trafic": 1,
