@@ -8,33 +8,63 @@ from models.citoyen import Citoyen
 from models.intervention import Intervention
 from models.trajet import Trajet
 from datetime import datetime, timedelta
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
 
+from datetime import datetime, timedelta
+from fastapi import HTTPException
 router = APIRouter(tags=["Analytics"])
 
 
-def score_mesure(mesure: Mesure):
-    poids = {
-        "Qualité de l'air": 2,
-        "Trafic": 1,
-        "Énergie": 0.5,
-        "Déchets": 1.5,
-        "Éclairage": 0.2
-    }
-    return (mesure.valeur or 0) * poids.get(mesure.type_mesure, 1)
+# Fonction de score réaliste
+def score_mesure(mes):
+    if mes.type_mesure == "Qualité de l'air":
+        if mes.valeur <= 50:
+            return 1
+        elif mes.valeur <= 100:
+            return 2
+        else:
+            return 3
+    elif mes.type_mesure == "Trafic":
+        return min(mes.valeur / 100, 5)
+    elif mes.type_mesure == "Énergie":
+        return min(mes.valeur / 100, 5)
+    elif mes.type_mesure == "Déchets":
+        return min(mes.valeur / 10, 5)
+    else:
+        return 0
 
 @router.get("/zones-plus-polluees")
-def zones_plus_polluees(db: Session = Depends(get_db)):
-    arrs = db.query(Arrondissement).all()
+def zones_plus_polluees_24h(db: Session = Depends(get_db)):
+    arrondissements = db.query(Arrondissement).all()
     result = []
 
-    for arr in arrs:
+    date_limite = datetime.now() - timedelta(hours=24)
+    mesures_trouvees = False
+
+    for arr in arrondissements:
         score_total = 0
         capteurs = db.query(Capteur).filter(Capteur.id_arrondissement == arr.id_arrondissement).all()
+
         for cap in capteurs:
-            mesures = db.query(Mesure).filter(Mesure.id_capteur == cap.id_capteur).all()
+            mesures = db.query(Mesure).filter(
+                Mesure.id_capteur == cap.id_capteur,
+                Mesure.date_mesure >= date_limite
+            ).all()
+
+            if mesures:
+                mesures_trouvees = True
+
             for mes in mesures:
                 score_total += score_mesure(mes)
-        result.append({"arrondissement": arr.nom_arrondissement, "score_total": score_total})
+
+        result.append({
+            "arrondissement": arr.nom_arrondissement,
+            "score_total": score_total
+        })
+
+    if not mesures_trouvees:
+        raise HTTPException(status_code=404, detail="Aucune mesure des 24 dernières heures trouvée.")
 
     # Trier par score décroissant
     result.sort(key=lambda x: x["score_total"], reverse=True)
