@@ -11,9 +11,7 @@ router = APIRouter(tags=["Technicien"])
 def create_technicien(tech: TechnicienCreate, db: Session = Depends(get_db)):
     db_tech = Technicien(
         nom=tech.nom,
-        prenom=tech.prenom,
-        email=tech.email,
-        certification=tech.certification,
+        prenom=tech.prenom
     )
     db.add(db_tech)
     db.commit()

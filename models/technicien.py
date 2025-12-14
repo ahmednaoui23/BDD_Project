@@ -8,7 +8,6 @@ class Technicien(Base):
     id_technicien = Column(Integer, primary_key=True, index=True)
     nom = Column(String(100), nullable=False)
     prenom = Column(String(100), nullable=False)
-    certification = Column(Boolean, nullable=False)
 
     interventions_intervient = relationship("Intervention", back_populates="technicien_intervient", foreign_keys="Intervention.id_technicien_intervient")
     interventions_valide = relationship("Intervention", back_populates="technicien_valide", foreign_keys="Intervention.id_technicien_valide")
