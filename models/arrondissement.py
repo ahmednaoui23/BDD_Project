@@ -13,3 +13,4 @@ class Arrondissement(Base):
     consultations = relationship("ConsultationCitoyenne", back_populates="arrondissement")
     trajets_depart = relationship("Trajet", back_populates="arrondissement_depart", foreign_keys="Trajet.id_arrondissement_depart")
     trajets_arrivee = relationship("Trajet", back_populates="arrondissement_arrivee", foreign_keys="Trajet.id_arrondissement_arrivee")
+    citoyens = relationship("Citoyen", back_populates="arrondissement")

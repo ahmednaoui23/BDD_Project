@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, Text
+from sqlalchemy import Column, Integer, String, Float, Text, ForeignKey
 from sqlalchemy.orm import relationship
 from .database import Base
 
@@ -13,4 +13,9 @@ class Citoyen(Base):
     score_engagement = Column(Float, nullable=False)
     preference_mobilite = Column(Text)
 
+    # ← Nouvelle colonne FK vers arrondissement
+    id_arrondissement = Column(Integer, ForeignKey("arrondissement.id_arrondissement"))
+
+    # Relations
+    arrondissement = relationship("Arrondissement", back_populates="citoyens")
     participations = relationship("Participation", back_populates="citoyen")
