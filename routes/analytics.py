@@ -86,7 +86,7 @@ def taux_disponibilite_capteurs(db: Session = Depends(get_db)):
 # 3. Citoyens les plus engagés
 @router.get("/citoyens-plus-engages")
 def citoyens_plus_engages(db: Session = Depends(get_db)):
-    citoyens = db.query(Citoyen).order_by(Citoyen.score_engagement.desc()).limit(10).all()
+    citoyens = db.query(Citoyen).order_by(Citoyen.score_engagement.desc()).limit(5).all()
     return [{"nom": c.nom, "score_engagement": c.score_engagement} for c in citoyens]
 
 # 4. Interventions prédictives du mois et économie générée
