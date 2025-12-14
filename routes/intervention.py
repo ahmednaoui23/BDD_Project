@@ -19,7 +19,8 @@ def create_intervention(intervention: InterventionCreate, db: Session = Depends(
         impact_environnemental=intervention.impact_environnemental,
         validation_ia=intervention.validation_ia,
         id_capteur=intervention.id_capteur,
-        id_technicien_intervient=intervention.id_technicien_intervient
+        id_technicien_intervient=intervention.id_technicien_intervient,
+        id_technicien_valide=intervention. id_technicien_valide
     )
     db.add(db_interv)
     db.commit()
