@@ -15,7 +15,8 @@ def create_citoyen(citoyen: CitoyenCreate, db: Session = Depends(get_db)):
         adresse=citoyen.adresse,
         telephone=citoyen.telephone,
         score_engagement=citoyen.score_engagement,
-        preference_mobilite=citoyen.preference_mobilite
+        preference_mobilite=citoyen.preference_mobilite,
+        id_arrondissement=citoyen.id_arrondissement,
     )
     db.add(db_citoyen)
     db.commit()

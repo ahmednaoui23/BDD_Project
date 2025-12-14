@@ -8,9 +8,8 @@ class CitoyenCreate(BaseModel):
     email: Optional[str] = None
     score_engagement: float
     preference_mobilite: Optional[str] = None
-
+    id_arrondissement: Optional[int] = None
 class CitoyenRead(CitoyenCreate):
     id_citoyen: int
-
     class Config:
         orm_mode = True
